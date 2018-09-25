@@ -1,0 +1,62 @@
+\documentclass[notitlepage,nofootinbib]{revtex4-1}
+
+\usepackage{amsmath,amssymb}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+
+\newcommand{\grad}{\boldsymbol{\nabla}}
+\newcommand{\divg}{\boldsymbol{\nabla}\cdot}
+\newcommand{\curl}{\boldsymbol{\nabla}\times}
+
+\begin{document}
+
+\title{The Transfer Matrix Method for Topological Insulators}
+\author{Samuel John Palmer}
+\date{\today}
+\maketitle
+
+\section{Maxwell's equations for topological insulators}
+Using the principle of extremal action we find a new form of the macroscopic Maxwell equations\footnote{Marie Rider, MSc report},
+\begin{subequations}\begin{alignat}{2}
+	\label{eqn:divgD}
+	\divg \vec{D}
+	&=
+	\rho + 2 \alpha \epsilon_0 c \left(\grad P_3 \cdot \vec{B}\right),
+	\\
+	\label{eqn:curlH}
+	\curl \vec{H} - \partial_t \vec{D},
+	&=
+	\vec{j} - \frac{2\alpha}{\mu_0c}\left(\grad P_3 \times \vec{E} \right),
+	\\
+	\label{eqn:curlE}
+	\curl \vec{E} + \partial_t \vec{B}
+	&=
+	\vec{0},
+	\\
+	\label{eqn:divgB}
+	\divg \vec{B}
+	&=
+	0,
+\end{alignat}\end{subequations}
+where $ \vec{D} = \epsilon \vec{E} $ and $ \vec{B} = \mu \vec{H} $.
+
+\begin{itemize}
+	\item Maxwell's equations are unchanged in the bulk, where $ \grad P_3 = \vec{0} $
+	\item Maxwell's equations are only modified at the surfaces, where $ \grad P_3 = \delta(\vec{r}\cdot\vec{\hat{n}}) (P_{32} - P_{31}) \vec{\hat{n}} $
+	\item Extending the transfer matrix method to include topological effects therefore requires changes to the boundary conditions only
+	\item In the transfer matrix method, $ E_\perp $ and $ H_\perp $ are written in terms of $ E_\parallel $ and $ H_\parallel $. Therefore the transfer matrix method requires the boundary conditions for $ E_\parallel $ and $ H_\parallel $ only.
+\end{itemize}
+
+Equation \eqref{eqn:curlE} is independent of $ P_3 $, so our condition on $ E_\parallel $ is unchanged,
+\begin{equation}
+	\label{eqn:EBC}
+	\vec{\hat{n}} \times (\vec{E}_2 - \vec{E}_1) = \vec{0}.
+\end{equation}
+
+From integration of equation \eqref{eqn:curlH},
+\begin{equation}
+	\label{eqn:HBC}
+	\vec{\hat{n}} \times (\vec{H}_2 - \vec{H}_1) = \vec{K} - \frac{2\alpha}{\mu_0c}(P_{32}-P_{31}) \vec{\hat{n}} \times \vec{E}.
+\end{equation}
+From equation \eqref{eqn:EBC} we know that $ E_\parallel $ is continuous across the interface, and therefore $ \vec{\hat{n}} \times \vec{E} = \vec{\hat{n}} \times \vec{E}_1 = \vec{\hat{n}} \times \vec{E}_2 $ is unambiguous.
+
+\end{document}
