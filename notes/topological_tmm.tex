@@ -53,10 +53,187 @@ Equation \eqref{eqn:curlE} is independent of $ P_3 $, so our condition on $ E_\p
 \end{equation}
 
 From integration of equation \eqref{eqn:curlH},
-\begin{equation}
+\begin{alignat}{1}
 	\label{eqn:HBC}
-	\vec{\hat{n}} \times (\vec{H}_2 - \vec{H}_1) = \vec{K} - \frac{2\alpha}{\mu_0c}(P_{32}-P_{31}) \vec{\hat{n}} \times \vec{E}.
+	\vec{\hat{n}} \times (\vec{H}_2 - \vec{H}_1)
+	&=
+	\vec{K} - \frac{2\alpha}{\mu_0c}(P_{32}-P_{31}) \vec{\hat{n}} \times \vec{E},
+	\\
+	&=
+	\vec{K}
+	-\frac{2\alpha}{\mu_0c}P_{32}\vec{\hat{n}}\times\vec{E_2}
+	+\frac{2\alpha}{\mu_0c}P_{31}\vec{\hat{n}}\times\vec{E_1}.
+\end{alignat}
+From equation \eqref{eqn:EBC} we know that $ E_\parallel $ is continuous across the interface, and therefore we can choose to interchange $ \vec{\hat{n}} \times \vec{E} = \vec{\hat{n}} \times \vec{E}_1 = \vec{\hat{n}} \times \vec{E}_2 $.
+
+
+\section{Transfer matrix formulation}
+
+Transfer matrix reference\footnote{Rumpf, CEM Lecture 4}
+
+Assuming linear, isotropic, homogeneous layers. Within each layer, we have forward and backward traveling plane wave solutions of the form
+%\begin{subequations}\begin{alignat}{2}
+%	\vec{E}(\vec{r},t)
+%	&=
+%	\vec{E_0} e^{i \vec{k} \cdot \vec{r} - i \omega t}
+%	\\
+%	\vec{H}(\vec{r},t)
+%	&=
+%	\vec{H_0} e^{i \vec{k} \cdot \vec{r} - i \omega t}
+%\end{alignat}\end{subequations}
+\begin{subequations}\begin{alignat}{5}
+	\begin{bmatrix}
+		E_{ix}(z) \\
+		E_{iy}(z)
+	\end{bmatrix}
+	&=&
+	\begin{bmatrix}
+		c_{ix}^+ \\
+		c_{iy}^+
+	\end{bmatrix}e^{+i k_{iz} z}
+	&+&
+	\begin{bmatrix}
+		c_{ix}^- \\
+		c_{iy}^-
+	\end{bmatrix}e^{-i k_{iz} z}
+	\\
+	\begin{bmatrix}
+		\tilde{H}_{ix}(z) \\
+		\tilde{H}_{iy}(z)
+	\end{bmatrix}
+	&=&
+	\vec{V_i}\begin{bmatrix}
+		c_{ix}^+ \\
+		c_{iy}^+
+	\end{bmatrix}e^{+i k_{iz} z}
+	&-&
+	\vec{V_i}\begin{bmatrix}
+		c_{ix}^- \\
+		c_{iy}^-
+	\end{bmatrix}e^{-i k_{iz} z}
+\end{alignat}\end{subequations}
+\begin{equation}
+	\boldsymbol{\psi_i}(z)=
+	\begin{bmatrix}
+		E_{ix}(z) \\
+		E_{iy}(z) \\
+		\tilde{H}_{ix}(z) \\
+		\tilde{H}_{iy}(z)
+	\end{bmatrix}
+	=
+	\vec{W_i} \begin{bmatrix}
+		\vec{c_i^+} e^{+ i k_z z} \\
+		\vec{c_i^-} e^{- i k_z z}
+	\end{bmatrix}
+%	=
+%	\begin{bmatrix}
+%		\mathbf{I} & \phantom{-}\mathbf{I} \\
+%		\mathbf{V_i} & -\mathbf{V_i} \\
+%	\end{bmatrix}
+%	\begin{bmatrix}
+%		  e^{+i k_{iz} z} \mathbf{I} & \\
+%		& e^{-i k_{iz} z} \mathbf{I}
+%	\end{bmatrix}
+%	\begin{bmatrix}
+%		c^+_{ix} \\
+%		c^+_{iy} \\
+%		c^-_{ix} \\
+%		c^-_{iy}
+%	\end{bmatrix}
 \end{equation}
-From equation \eqref{eqn:EBC} we know that $ E_\parallel $ is continuous across the interface, and therefore $ \vec{\hat{n}} \times \vec{E} = \vec{\hat{n}} \times \vec{E}_1 = \vec{\hat{n}} \times \vec{E}_2 $ is unambiguous.
+
+We seek the transfer matrix defined as $ \vec{c_{i+1}} = \vec{T_i} \vec{c_i} $. If we define
+\begin{alignat}{1}
+	\boldsymbol{\psi_i}(L_i) &= \vec{T_i^\Phi} \boldsymbol{\psi_i}(0) \\
+	\boldsymbol{\psi_{i+1}}(0) &= \vec{T_i^\Delta} \boldsymbol{\psi_i}(L_i)
+\end{alignat}
+such that $ \vec{W_{i+1}} \vec{c_{i+1}} = \vec{T_i^\Delta} \vec{W_i} \vec{T_i^\Phi} \vec{c_i}$ then the transfer matrix is
+\begin{equation}
+	\vec{T_i} = \vec{W_{i+1}^{-1}} \vec{T_i^\Delta} \vec{W_i} \vec{T_i^\Phi}
+\end{equation}.
+
+The matrix $ \vec{T_i^\Delta} $ is (see Appendix \ref{app:TiDelta}),
+\begin{equation}
+	\vec{T_i^\Delta}
+	=
+	\begin{bmatrix}
+		1 & 0 & 0 & 0 \\
+		0 & 1 & 0 & 0 \\
+		-i2\alpha \Delta P_3 & 0 & 1 & 0 \\
+		0 & -i2\alpha \Delta P_3 & 0 & 1
+	\end{bmatrix}
+\end{equation}
+where $ \Delta P_3 = P_{3,i+1} - P_{3,i}? $
+For $ P_{31} = P_{32} $ this reduces to the identity matrix.
+
+The tangential components of the wavevector, $ k_x = k_0 n_1 \cos\phi \sin\theta $ and $ k_y = k_0 n_1 \dots $, are continuous across each interface. For each layer, $ i $, we calculate the normal component,
+\begin{equation}
+	k_{z,i} = \sqrt{(nk_0)^2 - k_x^2 -k_y^2}
+\end{equation}
+
+\appendix
+
+\section{\label{app:TiDelta}Formula of $ \vec{T_i^\Delta} $}
+
+Boundary condition equation \eqref{eqn:EBC} gives
+\begin{equation}
+	\begin{bmatrix}
+		E_{i+1,x}(0) \\
+		E_{i+1,y}(0)
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		E_{i,x}(L_i) \\
+		E_{i,y}(L_i)
+	\end{bmatrix}
+\end{equation}
+and, not forgetting that we have normalised $\tilde{H} = +i \eta_0 H = i \mu_0 c H $, boundary condition equation \eqref{eqn:HBC} gives
+\begin{equation}
+	\begin{bmatrix}
+		\tilde{H}_{i+1,x}(0) \\
+		\tilde{H}_{i+1,y}(0)
+	\end{bmatrix}
+	+
+	i2\alpha P_{3,i+1}\begin{bmatrix}
+		E_{i+1,x}(0) \\
+		E_{i+1,y}(0)
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		\tilde{H}_{i,x}(L_i) \\
+		\tilde{H}_{i,y}(L_i)
+	\end{bmatrix}
+	+
+	i2\alpha P_{3,i}\begin{bmatrix}
+		E_{i,x}(L_i) \\
+		E_{i,y}(L_i)
+	\end{bmatrix}
+\end{equation}
+So altogether in terms of $ \boldsymbol{\psi_i} $ we have
+\begin{alignat}{1}
+	\vec{T_i^\Delta}
+	&=
+	\begin{bmatrix}
+		1 & 0 & 0 & 0 \\
+		0 & 1 & 0 & 0 \\
+		i2\alpha P_{3,i+1} & 0 & 1 & 0 \\
+		0 & i2\alpha P_{3,i+1} & 0 & 1
+	\end{bmatrix}^{-1}
+	\begin{bmatrix}
+		1 & 0 & 0 & 0 \\
+		0 & 1 & 0 & 0 \\
+		i2\alpha P_{3,i} & 0 & 1 & 0 \\
+		0 & i2\alpha P_{3,i} & 0 & 1
+	\end{bmatrix}
+	\\
+	&=
+	\begin{bmatrix}
+		1 & 0 & 0 & 0 \\
+		0 & 1 & 0 & 0 \\
+		-i2\alpha \Delta P_3 & 0 & 1 & 0 \\
+		0 & -i2\alpha \Delta P_3 & 0 & 1
+	\end{bmatrix}
+\end{alignat}
+where $ \Delta P_3 = P_{3,i+1} - P_{3,i} $.
 
 \end{document}
