@@ -142,29 +142,29 @@ Assuming linear, isotropic, homogeneous layers. Within each layer, we have forwa
 %	\end{bmatrix}
 \end{equation}
 
-We seek the transfer matrix defined as $ \vec{c_{i+1}} = \vec{T_i} \vec{c_i} $. If we define\footnote{I should fix the inconsistancy of one of these acting on $c$ and the other on $\psi$}
+We seek the transfer matrix defined as $ \vec{c_{i+1}} = \vec{T_i} \vec{c_i} $. If we define
 \begin{alignat}{1}
 	\vec{c_i}(L_i) &= \vec{T_i^\Phi} \vec{c_i}(0) \\
-	\boldsymbol{\psi_{i+1}}(0) &= \vec{T_i^\Delta} \boldsymbol{\psi_i}(L_i)
+	\vec{c_{i+1}}(0) &= \vec{T_i^\Delta} \vec{c_i}(L_i)
 \end{alignat}
-such that $ \vec{W_{i+1}} \vec{c_{i+1}} = \vec{T_i^\Delta} \vec{W_i} \vec{T_i^\Phi} \vec{c_i}$ then the transfer matrix is
+then the transfer matrix is
 \begin{equation}
-	\vec{T_i} = \vec{W_{i+1}^{-1}} \vec{T_i^\Delta} \vec{W_i} \vec{T_i^\Phi}
-\end{equation}.
-
-The matrix $ \vec{T_i^\Delta} $ is (see Appendix \ref{app:TiDelta}),
+	\vec{T_i} = \vec{T_i^\Delta} \vec{T_i^\Phi}
+\end{equation}
+where (see Appendix \ref{app:TiDelta})
 \begin{equation}
 	\vec{T_i^\Delta}
 	=
+	\vec{W_{i+1}^{-1}}
 	\begin{bmatrix}
 		1 & 0 & 0 & 0 \\
 		0 & 1 & 0 & 0 \\
 		-i2\alpha \Delta P_3 & 0 & 1 & 0 \\
 		0 & -i2\alpha \Delta P_3 & 0 & 1
 	\end{bmatrix}
+	\vec{W_i}
 \end{equation}
-where $ \Delta P_3 = P_{3,i+1} - P_{3,i}? $
-For $ P_{31} = P_{32} $ this reduces to the identity matrix.
+where $ \Delta P_3 = P_{3,i+1} - P_{3,i} $. For $ P_{3,i} = P_{3,i+1} $ this reduces to the identity matrix.
 
 The tangential components of the wavevector, $ k_x = k_0 n_1 \cos\phi \sin\theta $ and $ k_y = k_0 n_1 \dots $, are continuous across each interface. For each layer, $ i $, we calculate the normal component,
 \begin{equation}

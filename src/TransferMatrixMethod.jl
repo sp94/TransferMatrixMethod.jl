@@ -65,8 +65,8 @@ function tmm(g, s)
         W2 = W(g, s, i+1)
         kz = sqrt(epr1*mur1*s.k0^2 - s.kx^2 - s.ky^2)
         Tϕ = diagm(0=>[exp(+1im*kz*d), exp(+1im*kz*d), exp(-1im*kz*d), exp(-1im*kz*d)])
-        TΔ = diagm(0=>[1,1,1,1], -2=>[-2im*α*ΔP3,-2im*α*ΔP3])
-        T = W2 \ TΔ * W1 * Tϕ * T
+        TΔ = W2 \ diagm(0=>[1,1,1,1], -2=>[-2im*α*ΔP3,-2im*α*ΔP3]) * W1
+        T = TΔ * Tϕ * T
     end
     T11 = T[1:2,1:2]
     T12 = T[1:2,3:4]
