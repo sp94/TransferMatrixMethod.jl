@@ -3,4 +3,4 @@ using Test
 
 include("test_fresnel.jl")
 include("test_plasmon.jl")
-include("test_P3_BCs")
+include("test_P3_BCs.jl")
