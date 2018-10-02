@@ -24,6 +24,15 @@ struct Geometry
     d_list::Array{Real,1}
     epr_list::Array{ComplexF64,1}
     mur_list::Array{ComplexF64,1}
+    P3_list::Array{Real,1}
+    function Geometry(d_list, epr_list, mur_list, P3_list)
+        @assert d_list[1] == 0 && d_list[end] == 0
+        return new(d_list, epr_list, mur_list, P3_list)
+    end
+end
+
+function Geometry(d_list, epr_list, mur_list)
+    return Geometry(d_list, epr_list, mur_list, zero(d_list))
 end
 
 struct Source
@@ -49,21 +58,23 @@ function tmm(g, s)
     T = I
     for i in 1:length(g.d_list)-1
         d = g.d_list[i]
-        epr1, epr2 = g.epr_list[i:i+1]
-        mur1, mur2 = g.mur_list[i:i+1]
+        epr1 = g.epr_list[i]
+        mur1 = g.mur_list[i]
+        ΔP3 = g.P3_list[i+1] - g.P3_list[i]
         W1 = W(g, s, i)
         W2 = W(g, s, i+1)
         kz = sqrt(epr1*mur1*s.k0^2 - s.kx^2 - s.ky^2)
         Tϕ = diagm(0=>[exp(+1im*kz*d), exp(+1im*kz*d), exp(-1im*kz*d), exp(-1im*kz*d)])
-        #TΔ(ΔP3) = diagm(0=>[1,1,1,1], -2=>[-2im*α*ΔP3,-2im*α*ΔP3])
-        T = W2 \ W1 * Tϕ * T
+        TΔ = diagm(0=>[1,1,1,1], -2=>[-2im*α*ΔP3,-2im*α*ΔP3])
+        T = W2 \ TΔ * W1 * Tϕ * T
     end
     T11 = T[1:2,1:2]
     T12 = T[1:2,3:4]
     T21 = T[3:4,1:2]
     T22 = T[3:4,3:4]
-    c1m = -T22\T21*[s.Ex,s.Ey]
-    c2p = T11*[s.Ex,s.Ey] + T12*c1m
+    c1p = [s.Ex,s.Ey]
+    c1m = -T22\T21*c1p
+    c2p = T11*c1p + T12*c1m
     return c1m, c2p
 end
 
