@@ -2,7 +2,7 @@ n1, n2 = 3, 4
 
 g = Geometry([0,0], [n1^2,n2^2], [1,1])
 
-function fresnel(pol,n1,n2,θ,ϕ)
+function fresnel(pol,n1,n2,θ)
     θt = asin(n1/n2*sin(θ))
     @assert isapprox(n1*sin(θ), n2*sin(θt))
     if pol == "s"
@@ -33,7 +33,7 @@ for θ in (0:5:85)*pi/180
     # Then we could merge the tests for p and s polarisation
     # (Or, calculate r and t in the tmm function!)
     r, t = c1m[1]/s.Ex, c2p[1]/st.Ex
-    r_, t_ = fresnel("p", n1, n2, θ, 0)
+    r_, t_ = fresnel("p", n1, n2, θ)
     @test isapprox(r, r_)
     @test isapprox(t, t_)
 end
@@ -47,7 +47,7 @@ for θ in (0:5:85)*pi/180
 
     c1m, c2p = tmm(g, s)
     r, t = c1m[2]/s.Ey, c2p[2]/s.Ey
-    r_, t_ = fresnel("s", n1, n2, θ, pi/2)
+    r_, t_ = fresnel("s", n1, n2, θ)
     @test isapprox(r, r_)
     @test isapprox(t, t_)
 end
