@@ -1,8 +1,6 @@
 epr_list = 1 .+ rand(ComplexF64, 2)
 mur_list = 1 .+ rand(ComplexF64, 2)
 
-@show epr_list, mur_list
-
 for P3_list in ([0,0], [0,1/2], [1/2,0])
     g = Geometry([0,0], epr_list, mur_list, P3_list)
     s = Source(n1, 1, pi/4, pi/4)
