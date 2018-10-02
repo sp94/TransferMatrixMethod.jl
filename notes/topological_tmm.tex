@@ -142,9 +142,9 @@ Assuming linear, isotropic, homogeneous layers. Within each layer, we have forwa
 %	\end{bmatrix}
 \end{equation}
 
-We seek the transfer matrix defined as $ \vec{c_{i+1}} = \vec{T_i} \vec{c_i} $. If we define
+We seek the transfer matrix defined as $ \vec{c_{i+1}} = \vec{T_i} \vec{c_i} $. If we define\footnote{I should fix the inconsistancy of one of these acting on $c$ and the other on $\psi$}
 \begin{alignat}{1}
-	\boldsymbol{\psi_i}(L_i) &= \vec{T_i^\Phi} \boldsymbol{\psi_i}(0) \\
+	\vec{c_i}(L_i) &= \vec{T_i^\Phi} \vec{c_i}(0) \\
 	\boldsymbol{\psi_{i+1}}(0) &= \vec{T_i^\Delta} \boldsymbol{\psi_i}(L_i)
 \end{alignat}
 such that $ \vec{W_{i+1}} \vec{c_{i+1}} = \vec{T_i^\Delta} \vec{W_i} \vec{T_i^\Phi} \vec{c_i}$ then the transfer matrix is
