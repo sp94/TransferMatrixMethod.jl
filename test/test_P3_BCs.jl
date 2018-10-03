@@ -3,7 +3,6 @@ epr_list = 1 .+ rand(ComplexF64, 2)
 mur_list = 1 .+ rand(ComplexF64, 2)
 
 for P3_list in ([0,0], [0,1/2], [1/2,0])
-    @show P3_list
     g = Geometry(d_list, epr_list, mur_list, P3_list)
     res = tmm(g, k0, pi/3*rand(), pi/2*rand())
     E1x = res.inc.Ex + res.ref.Ex
