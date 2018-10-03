@@ -31,14 +31,8 @@ mur_list = ones(length(epr_list))
 g = Geometry(d_list, epr_list, mur_list)
 results = []
 for θ in (0:5:40)*pi/180
-	s = Source(sqrt(epr_list[1]), k0, θ, 0)
-	θt = asin(sqrt(epr_list[1])/sqrt(epr_list[end])*sin(θ))
-	st = Source(sqrt(epr_list[end]), k0, θt, 0)
-	c1m, c2p = tmm(g, s)
-	r, t = c1m[1]/s.Ex, c2p[1]/st.Ex
-	push!(results, [-r, t]) # difference in sign convention on r...
-	# I might want to adopt this sign convention
-	# as it is used by both fresnel equations as on Wikipedia and TMM
+	res = tmm(g, k0, θ, 0)
+	push!(results, [res.ref.p, res.trn.p])
 end
 
 @test isapprox(results, benchmark)
