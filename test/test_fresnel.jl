@@ -1,6 +1,7 @@
-n1, n2 = 3, 4
+n1, n2 = 3+1im, 4+2im
+ep1, ep2 = n1^2, n2^2
 
-g = Geometry([0,0], [n1^2,n2^2], [1,1])
+g = Geometry([0,0], [ep1,ep2], [1,1])
 
 function fresnel(pol,n1,n2,θ)
     θt = asin(n1/n2*sin(θ))
