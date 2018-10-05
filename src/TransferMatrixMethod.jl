@@ -25,6 +25,7 @@ struct Geometry
     P3_list::Array{Real,1}
     function Geometry(d_list, epr_list, mur_list, P3_list)
         @assert d_list[1] == 0 && d_list[end] == 0
+        @assert all((P3_list.==0) .| (P3_list.==1/2))
         return new(d_list, epr_list, mur_list, P3_list)
     end
 end
