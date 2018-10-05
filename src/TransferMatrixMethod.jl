@@ -160,6 +160,51 @@ function tmm(g, k0, θ, ϕ)
     return Result(g, inc, ref, trn)
 end
 
-export tmm, Geometry, PlaneWave, TransmittedPlaneWave, ReflectedPlaneWave
+function get_fields(res::Result, xs::AbstractArray{<:Real,1}, zs::AbstractArray{<:Real,1})
+    g = res.g
+    inc = res.inc
+    # Calculate the forward and backward traveling waves
+    fws = Array{PlaneWave}(undef, length(g.d_list))
+    bws = Array{PlaneWave}(undef, length(g.d_list))
+    fws[1] = res.inc
+    bws[1] = res.ref
+    for i in 1:length(g.d_list)-1
+        c = T(res.g,res.inc,i) * [fws[i].Ex, fws[i].Ey, bws[i].Ex, bws[i].Ey]
+        epr = res.g.epr_list[i+1]
+        mur = res.g.mur_list[i+1]
+        fws[i+1] = TransmittedPlaneWave(res.g.epr_list[i+1], res.g.mur_list[i+1],
+            res.inc.k0, res.inc.kx, res.inc.ky, c[1], c[2])
+        bws[i+1] = ReflectedPlaneWave(res.g.epr_list[i+1], res.g.mur_list[i+1],
+            res.inc.k0, res.inc.kx, res.inc.ky, c[3], c[4])
+    end
+    for w in vcat(fws, bws)
+        if any(isnan.([w.Ex,w.Ey,w.Ez,w.kx,w.ky,w.kz]))
+            error()
+        end
+    end
+    # Calculate E and H
+    E = zeros(ComplexF64, length(xs), length(zs), 3)
+    H = zeros(ComplexF64, length(xs), length(zs), 3)
+    z_list = cumsum(res.g.d_list)
+    layer = 1
+    @assert issorted(zs)
+    for (iz,z) in enumerate(zs), (ix,x) in enumerate(xs)
+        while layer < length(z_list) && z >= z_list[layer]
+            layer += 1
+        end
+        Δx = x - xs[1]
+        Δz = z - vcat(0,z_list)[layer]
+        @assert layer == 1  || Δz >= 0
+        @assert layer == length(res.g.d_list) || Δz <= res.g.d_list[layer]
+        fw, bw = fws[layer], bws[layer]
+        E[ix,iz,:] .+= [fw.Ex,fw.Ey,fw.Ez].*exp(1im*fw.kx*Δx+1im*fw.kz*Δz)
+        E[ix,iz,:] .+= [bw.Ex,bw.Ey,bw.Ez].*exp(1im*bw.kx*Δx+1im*bw.kz*Δz)
+        H[ix,iz,:] .+= [fw.Hx,fw.Hy,fw.Hz].*exp(1im*fw.kx*Δx+1im*fw.kz*Δz)
+        H[ix,iz,:] .+= [bw.Hx,bw.Hy,bw.Hz].*exp(1im*bw.kx*Δx+1im*bw.kz*Δz)
+    end
+    return E, H
+end
+
+export tmm, Geometry, PlaneWave, TransmittedPlaneWave, ReflectedPlaneWave, get_fields
 
 end # module
