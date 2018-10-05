@@ -121,28 +121,33 @@ struct Result
     end
 end
 
+function T(g, inc, i)
+    d = g.d_list[i]
+    epr1, epr2 = g.epr_list[i:i+1]
+    mur1, mur2 = g.mur_list[i:i+1]
+    k1z = TransmittedPlaneWave(epr1, mur1, inc.k0, inc.kx, inc.ky, NaN, NaN).kz
+    k2z = TransmittedPlaneWave(epr2, mur2, inc.k0, inc.kx, inc.ky, NaN, NaN).kz
+    W1 = W(epr1, mur1, inc.k0, inc.kx, inc.ky, k1z)
+    W2 = W(epr2, mur2, inc.k0, inc.kx, inc.ky, k2z)
+    ϕ = exp(1im*k1z*d)
+    Tϕ = diagm(0=>[ϕ, ϕ, 1/ϕ, 1/ϕ])
+    ΔP3 = g.P3_list[i+1] - g.P3_list[i]
+    TΔ = W2 \ diagm(0=>[1,1,1,1], -2=>[-2im*α*ΔP3,-2im*α*ΔP3]) * W1
+    return TΔ * Tϕ
+end
+
 function tmm(g, k0, θ, ϕ)
     inc = IncidentPlaneWave(g.epr_list[1], g.mur_list[1], k0, θ, ϕ)
-    # Build transfer matrix
-    T = I
+    # Build global transfer matrix
+    Tg = I
     for i in 1:length(g.d_list)-1
-        d = g.d_list[i]
-        epr1, epr2 = g.epr_list[i:i+1]
-        mur1, mur2 = g.mur_list[i:i+1]
-        ΔP3 = g.P3_list[i+1] - g.P3_list[i]
-        k1z = TransmittedPlaneWave(epr1, mur1, k0, inc.kx, inc.ky, NaN, NaN).kz
-        k2z = TransmittedPlaneWave(epr2, mur2, k0, inc.kx, inc.ky, NaN, NaN).kz
-        W1 = W(epr1, mur1, k0, inc.kx, inc.ky, k1z)
-        W2 = W(epr2, mur2, k0, inc.kx, inc.ky, k2z)
-        Tϕ = diagm(0=>[exp(+1im*k1z*d), exp(+1im*k1z*d), exp(-1im*k1z*d), exp(-1im*k1z*d)])
-        TΔ = W2 \ diagm(0=>[1,1,1,1], -2=>[-2im*α*ΔP3,-2im*α*ΔP3]) * W1
-        T = TΔ * Tϕ * T
+        Tg = T(g,inc,i) * Tg
     end
     # Solve transfer matrix equation
-    T11 = T[1:2,1:2]
-    T12 = T[1:2,3:4]
-    T21 = T[3:4,1:2]
-    T22 = T[3:4,3:4]
+    T11 = Tg[1:2,1:2]
+    T12 = Tg[1:2,3:4]
+    T21 = Tg[3:4,1:2]
+    T22 = Tg[3:4,3:4]
     c1p = [inc.Ex, inc.Ey]
     c1m = -T22\T21*c1p
     c2p = T11*c1p + T12*c1m
