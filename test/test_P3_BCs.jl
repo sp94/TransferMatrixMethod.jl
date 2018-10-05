@@ -1,3 +1,5 @@
+α = TransferMatrixMethod.α
+
 d_list = [0, 0]
 epr_list = 1 .+ rand(ComplexF64, 2)
 mur_list = 1 .+ rand(ComplexF64, 2)

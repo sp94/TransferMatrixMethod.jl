@@ -157,9 +157,4 @@ end
 
 export tmm, Geometry, PlaneWave, TransmittedPlaneWave, ReflectedPlaneWave
 
-# temporary, for testing BCs
-# ultimately, the tmm function should return Ex,Ey,Hx,Hy
-# without the need for the user to use W
-export W, α
-
 end # module
