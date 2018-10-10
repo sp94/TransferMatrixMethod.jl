@@ -2,7 +2,7 @@ module TransferMatrixMethod
 
 using LinearAlgebra
 
-α = 1/137
+α = 1/137.035999
 
 P(kx_,ky_,epr,mur) = [
     kx_*ky_          epr*mur-kx_*kx_;
