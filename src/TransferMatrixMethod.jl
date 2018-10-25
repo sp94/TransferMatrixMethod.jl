@@ -1,6 +1,7 @@
 module TransferMatrixMethod
 
 using LinearAlgebra
+using PyPlot
 
 α = 1/137.035999
 
@@ -205,6 +206,30 @@ function get_fields(res::Result, xs::AbstractArray{<:Real,1}, zs::AbstractArray{
     return E, H
 end
 
-export tmm, Geometry, PlaneWave, TransmittedPlaneWave, ReflectedPlaneWave, get_fields
+function plot_intensity(res::Result, zs::AbstractArray{<:Real,1}=Array{Real,1}())
+    g = res.g
+    z_list = cumsum(g.d_list)
+    if length(zs) == 0
+        @show res.inc.kz, res.trn.kz
+        dz = 2pi / max(abs(real(res.inc.kz)),abs(imag(res.inc.kz))) / 100
+        append!(zs, range(-100dz,stop=0,step=dz))
+        for i in 2:length(g.d_list)-2
+            z1, z2 = z_list[i], z_list[i+1]
+            kz = TransmittedPlaneWave(g.epr_list[i], g.mur_list[i],
+                  inc.k0, inc.kx, inc.ky, 0, 0).kz
+            dz = 2pi / max(abs(real(kz)),abs(imag(kz))) / 100
+            append!(zs, range(z1, stop=z2, length=cld(z2-z1,dz)))
+        end
+        dz = 2pi / max(abs(real(res.trn.kz)),abs(imag(res.trn.kz))) / 100
+        append!(zs, range(z_list[end],stop=z_list[end]+100dz,step=dz))
+    end
+    E, H = get_fields(res, [0], zs)
+    plot(zs, mapslices(norm, E, dims=3)[1,:])
+    for z in cumsum(res.g.d_list)
+        axvline(z)
+    end
+end
+
+export tmm, Geometry, PlaneWave, TransmittedPlaneWave, ReflectedPlaneWave, get_fields, plot_intensity
 
 end # module
