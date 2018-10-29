@@ -216,7 +216,7 @@ function plot_intensity(res::Result, zs::AbstractArray{<:Real,1}=Array{Real,1}()
         for i in 2:length(g.d_list)-2
             z1, z2 = z_list[i], z_list[i+1]
             kz = TransmittedPlaneWave(g.epr_list[i], g.mur_list[i],
-                  inc.k0, inc.kx, inc.ky, 0, 0).kz
+                  res.inc.k0, res.inc.kx, res.inc.ky, 0, 0).kz
             dz = 2pi / max(abs(real(kz)),abs(imag(kz))) / 100
             append!(zs, range(z1, stop=z2, length=cld(z2-z1,dz)))
         end
